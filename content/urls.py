@@ -4,5 +4,6 @@ from content import views
 
 app_name = 'content'
 urlpatterns = [
-    path('', views.post_list, name='post_list'),
+    path('', views.content_list, name='content_list'),
+    path('add', views.content_add, name='content_add'),
 ]
