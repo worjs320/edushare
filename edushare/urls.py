@@ -19,8 +19,9 @@ from content import views as content_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('app.urls')),
     # path('signup', ),
     # path('signin', ),
-    path('', content_views.index),
+    # path('', content_views.index),
     path('content/', include('content.urls')),
 ]

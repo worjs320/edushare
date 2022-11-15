@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>EduShare</title>
+  <link rel="stylesheet" type="text/css" href="{% static '/css/SpoqaHanSansNeo.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+  <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.4/dist/flowbite.min.css" />
+  <script>
+
+  </script>
+</head>
+
+<body>
+  <div class="header-gnb">
+    <div class="container">
+      <div class="header-gnb-wrapper">
+        <a class="sub-navigation-logo"><img src="" /></a>
+        <div class="service-menu" id="serviceMenu">EduShare</div>
+        <div class="icon-box">
+          <img class="icon search-icon" src="{% static '/css/search-icon.svg' %}" />
+          {% if user.is_authenticated %}
+          <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName"
+            class="flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 :hover:text-blue-500 md:mr-0 focus:ring-4 focus:ring-gray-100 :focus:ring-gray-700 :text-white"
+            type="button">
+            <span class="sr-only">Open user menu</span>
+            <img class="mr-2 w-8 h-8 rounded-full" src="{% static '/img/default_avatar.png' %}" alt="user photo">
+            {{ user.first_name }}
+            <svg class="w-4 h-4 mx-1.5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div id="dropdownAvatarName"
+            class="z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow :bg-gray-700 :divide-gray-600 hidden"
+            data-popper-placement="bottom"
+            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(415.2px, 62.4px, 0px);">
+            <div class="py-3 px-4 text-sm text-gray-900 :text-white">
+              <!-- <div class="font-medium ">Pro User</div> -->
+              <div class="truncate">{{ user.username }}</div>
+            </div>
+            <ul class="py-1 text-sm text-gray-700 :text-gray-200"
+              aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
+              <li>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">내 학습</a>
+              </li>
+              <li>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">내 학습 노트</a>
+              </li>
+              <li>
+                <a href="#" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">개인정보 수정</a>
+              </li>
+            </ul>
+            <div class="py-1">
+              <a href="/logout" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 :hover:bg-gray-600 :text-gray-200 :hover:text-white">로그아웃</a>
+            </div>
+          </div>
+
+          {% else %}
+          <div class="button-group-box" id="buttonGroupBox">
+            <a class="btn btn-common btn-white-border" href="/signin">로그인</a>
+            <a class="btn btn-common btn-violet" href="/signup">회원가입</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="header-snb">
+    <div class="container">
+      <a class="sub-navigation active" href="/content/">
+        <div>콘텐츠</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>재생 목록</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>랭킹</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>마이페이지</div>
+      </a>
+    </div>
+  </div>
+  <div class="relative"><img class="w-full" src="{% static '/img/background.png' %}">
+    <p class="body-title">다양한 콘텐츠를 등록하고 학습해보세요</p>
+  </div>
+  <div class="container ">
+    <div class="p-8 pt-0">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+        {% for content in contents.all %}
+        <div class="p-4 rounded-md items-center justify-center h-200 shadow sm:overflow-hidden sm:rounded-md">
+          <div class="group relative">
+            <div class="aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none">
+              <img src="{{ content.youtube_thumbnail }}" alt=""
+                class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+            </div>
+            <div class="mt-4 flex justify-between">
+              <div>
+                <h3 class="text-mx text-gray-700">
+                  <a href="#">
+                    <span aria-hidden="true" class="absolute inset-0"></span>
+                    {{ content.title }}
+                  </a>
+                </h3>
+                <p class="mt-2 text-sm text-gray-500">{{ content.user_id }}</p>
+              </div>
+              <p class="text-sm font-medium text-gray-900"><span class="text-red-600">❤</span> {{ content.like_count }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://unpkg.com/flowbite@1.5.4/dist/flowbite.js"></script>
+
+</html>
