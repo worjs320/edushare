@@ -1,11 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth.models import User
 from .models import Content
-
-# Create your views here.
-
-def index():
-  return redirect('/content')
 
 def content_list(request):
   contents = Content.objects
@@ -14,7 +8,10 @@ def content_list(request):
 def content_add(request):
   if request.method == 'POST':
     content = Content()
-    content.user_id = User.objects.get(id=1)
+    if request.user.is_authenticated():
+      content.user_id = request.user.first_name
+    else:
+      content.user_id = 'unknown'
     content.title = request.POST['title']
     
     youtube_link = request.POST['youtube_link']
