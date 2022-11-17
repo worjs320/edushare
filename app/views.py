@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout as django_logout
 from django.contrib.auth.models import User
-from django.http import JsonResponse
 
 def index(request):
   return redirect('/content')
@@ -33,7 +32,7 @@ def signin(request):
 
     if user is not None:
       login(request, user)
-      return render('/content')
+      return redirect('/content')
     else:
       return render(request, 'app/signin.html', {'passwordFail': True})
   else:
