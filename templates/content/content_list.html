@@ -108,16 +108,13 @@
                 class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
             </div>
             <div class="mt-4 flex justify-between">
-              <div>
-                <h3 class="text-mx text-gray-700">
-                  <a href="#">
-                    <span aria-hidden="true" class="absolute inset-0"></span>
-                    {{ content.title }}
-                  </a>
+              <div class="overflow-hidden">
+                <h3 class="text-mx text-gray-700 overflow-hidden text-ellipsis">
+                  <a href="/content/{{content.id}}">{{ content.title }}</a>
                 </h3>
-                <p class="mt-2 text-sm text-gray-500">{{ content.user_id }}</p>
+                <p class="mt-2 text-sm text-gray-500">{{ content.user_name }}</p>
               </div>
-              <p class="text-sm font-medium text-gray-900"><span class="text-red-600">❤</span> {{ content.like_count }}
+              <p class="text-sm font-medium text-gray-900 whitespace-nowrap"><span class="text-red-600">❤</span> {{ content.like_count }}
               </p>
             </div>
           </div>

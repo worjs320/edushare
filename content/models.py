@@ -5,6 +5,7 @@ from django.utils import timezone
 
 class Content(models.Model):
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user_name = models.CharField(max_length=200, null=True)
     title = models.CharField(max_length=200)
     youtube_link = models.CharField(max_length=200)
     youtube_thumbnail = models.CharField(max_length=200, default='')

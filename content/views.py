@@ -1,5 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
+from django.contrib.auth.models import User
 from .models import Content
+from urllib.parse import urlparse, parse_qs
 
 def content_list(request):
   contents = Content.objects
@@ -8,15 +10,16 @@ def content_list(request):
 def content_add(request):
   if request.method == 'POST':
     content = Content()
-    if request.user.is_authenticated():
-      content.user_id = request.user.first_name
-    else:
-      content.user_id = 'unknown'
+    if request.user.is_authenticated:
+      content.user_id = User.objects.get(username=request.user.username)
+      content.user_name = User.objects.get(username=request.user.username).first_name
     content.title = request.POST['title']
     
     youtube_link = request.POST['youtube_link']
+    parsed_youtube_link = urlparse(youtube_link)
+    
     content.youtube_link = youtube_link
-    youtube_thumbnail = 'https://img.youtube.com/vi/' + youtube_link.split('v=')[1] + '/0.jpg'
+    youtube_thumbnail = 'https://img.youtube.com/vi/' + parse_qs(parsed_youtube_link.query)['v'][0] + '/0.jpg'
     content.youtube_thumbnail = youtube_thumbnail
     content.view_count = 0
     content.like_count = 0
