@@ -5,10 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EduShare</title>
-    <link rel="stylesheet" type="text/css" href="{% static '/css/SpoqaHanSansNeo.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    {% include 'common/html_head.html' %}
     <script>
       tailwind.config = {
         theme: {
@@ -22,21 +19,8 @@
     </script>
   </head>
   <body>
-    <div class="header-gnb">
-      <div class="container">
-        <div class="header-gnb-wrapper">
-          <a class="sub-navigation-logo"><img src="" /></a>
-          <div class="service-menu" id="serviceMenu">EduShare</div>
-          <div class="icon-box">
-            <img class="icon search-icon" src="{% static '/css/search-icon.svg' %}" />
-            <div class="button-group-box" id="buttonGroupBox">
-              <a class="btn btn-common btn-white-border" href="">로그인</a>
-              <a class="btn btn-common btn-violet" href="">회원가입</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include 'common/top.html' %}
+    {% block content %}
     <div class="header-snb">
       <div class="container">
         <a class="sub-navigation active" href="/content/"><div>콘텐츠</div></a>
@@ -94,7 +78,7 @@
                     <div class="mt-1">
                       <textarea id="description" name="description" rows="15" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="콘텐츠에 대한 설명을 입력해 주세요."></textarea>
                     </div>
-                    <p class="mt-2 text-sm text-gray-500">Brief description for your profile. URLs are hyperlinked.</p>
+                    <!-- <p class="mt-2 text-sm text-gray-500">Brief description for your profile. URLs are hyperlinked.</p> -->
                   </div>
                 </div>
                 <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
@@ -113,4 +97,6 @@
       </div>
     </div>
   </body>
+  {% endblock %}
+  {% include 'common/footer.html' %}
 </html>
