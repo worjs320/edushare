@@ -47,13 +47,15 @@
         <div class="p-4 rounded-md items-center justify-center h-200 shadow sm:overflow-hidden sm:rounded-md">
           <div class="group relative">
             <div class="aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none">
-              <img src="{{ content.youtube_thumbnail }}" alt=""
+              <a href="/content/{{content.pk}}">
+                <img src="{{ content.youtube_thumbnail }}" alt=""
                 class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+              </a>
             </div>
             <div class="mt-4 flex justify-between">
               <div class="overflow-hidden">
                 <h3 class="text-mx text-gray-700 overflow-hidden text-ellipsis">
-                  <a href="/content/{{content.id}}">{{ content.title }}</a>
+                  <a href="/content/{{content.pk}}">{{ content.title }}</a>
                 </h3>
                 <p class="mt-2 text-sm text-gray-500">{{ content.user_name }}</p>
               </div>

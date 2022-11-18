@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>EduShare</title>
+    {% include 'common/html_head.html' %}
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+
+      li {
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+        font-size: 100%;
+        vertical-align: baseline;
+      }
+
+      #sidebar {
+        position: fixed;
+        top: 64px;
+        right: 0px;
+        display: none;
+        flex-direction: column;
+        flex-shrink: 0;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        width: 68px;
+        height: 100%;
+        min-height: calc(var(--vh, 1vh) * 100);
+        padding-top: 10px;
+        background-color: rgb(248, 249, 250);
+        box-shadow: rgb(0 0 0 / 56%) 0px 0px 1px 0px;
+        z-index: 100;
+      }
+
+      .css-orgeeu {
+        all: unset;
+        display: flex;
+        flex-direction: column;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        justify-content: center;
+        margin-bottom: 14px;
+        width: 100%;
+        height: 56px;
+        font-size: 11px;
+        color: rgb(134, 142, 150);
+        background-color: rgb(248, 249, 250);
+        cursor: pointer;
+      }
+
+      .sidebar-page {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        background-color: rgb(255, 255, 255);
+        transition: transform 0.2s;
+        z-index: 99;
+        box-shadow: rgb(0 0 0 / 10%) 0px 2px 6px 0px, rgb(0 0 0 / 32%) 0px 0px 1px 0px;
+        top: 64px;
+        bottom: 0px;
+        right: 80px;
+        width: 480px;
+        height: 100%;
+      }
+
+      #video {
+        transition: margin-right 0.7s;
+      }
+
+      #btnRun {
+        right: 0px;
+        margin-right: 20px;
+        margin-top: -25px;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'common/top.html' %} {% include 'common/footer.html' %}
+    <div id='video' class="flex" style="height: calc(100vh - 64px); min-height: calc(100vh - 64px); margin-right: 561px">
+        <iframe src="https://www.youtube.com/embed/{{content.youtube_code}}" type="video/mp4" style="width: 100%; height: 100%"></iframe>
+    </div>
+    <div id="sidebar" class="bg-slate-100" style="width: 80px; display: flex;">
+      <ul data-testid="sidebar">
+        <li>
+          <button type="button" title="콘텐츠 정보" class="css-orgeeu" onclick="showDescription()">
+            <svg width="24" height="19" viewBox="0 0 24 19">
+              <title>콘텐츠 정보</title>
+              <path
+                fill="#212529"
+                fill-rule="evenodd"
+                d="M3.75 14.615h-3c-.414 0-.75.328-.75.731v2.923c0 .404.336.731.75.731h3c.414 0 .75-.327.75-.73v-2.924c0-.403-.336-.73-.75-.73zM3.75 0h-3C.336 0 0 .327 0 .73v2.924c0 .403.336.73.75.73h3c.414 0 .75-.327.75-.73V.73C4.5.327 4.164 0 3.75 0zm0 7.308h-3c-.414 0-.75.327-.75.73v2.924c0 .403.336.73.75.73h3c.414 0 .75-.327.75-.73V8.038c0-.403-.336-.73-.75-.73zm19.5 8.038h-15c-.414 0-.75.327-.75.73v1.462c0 .404.336.731.75.731h15c.414 0 .75-.327.75-.73v-1.462c0-.404-.336-.73-.75-.73zm0-14.615h-15c-.414 0-.75.327-.75.73v1.462c0 .404.336.73.75.73h15c.414 0 .75-.326.75-.73V1.462c0-.404-.336-.731-.75-.731zm0 7.307h-15c-.414 0-.75.328-.75.731v1.462c0 .403.336.73.75.73h15c.414 0 .75-.327.75-.73V8.769c0-.403-.336-.73-.75-.73z"
+              ></path>
+            </svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" title="커뮤니티" class="css-orgeeu" onclick="showNote()">
+            <svg width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="comment-alt-dots" role="img" viewBox="0 0 512 512">
+              <title>CommentIcon</title>
+              <path
+                fill="#212529"
+                d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 9.8 11.2 15.5 19.1 9.7L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zM128 240c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"
+              ></path>
+            </svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" title="노트" class="css-orgeeu" onclick="showEditor()">
+            <svg width="24" height="26" viewBox="0 0 26 26">
+              <title>학습 노트</title>
+              <path
+                fill="#212529"
+                fill-rule="evenodd"
+                d="M4.816 6.2c0-.177.07-.346.196-.471.125-.125.294-.196.471-.196h9.967c.177 0 .347.07.472.196.125.125.195.294.195.471s-.07.346-.195.471-.295.196-.472.196H5.483c-.177 0-.346-.07-.471-.196-.125-.125-.196-.294-.196-.471v0zm.667 5.2h9.967c.177 0 .347-.07.472-.195s.195-.295.195-.472c0-.176-.07-.346-.195-.471s-.295-.195-.472-.195H5.483c-.177 0-.346.07-.471.195s-.196.295-.196.471c0 .177.07.347.196.472.125.125.294.195.471.195v0zm10.186 3.237c-.07-.024-.144-.037-.218-.037H5.483c-.177 0-.347.07-.472.195s-.195.295-.195.472.07.346.195.471.295.195.472.195h9.44l.746-1.296zM5.011 19.328c-.093.094-.157.212-.182.342-.026.129-.013.263.038.385.05.122.136.226.245.3.11.072.239.112.37.112h8.16v-1.334h-8.16c-.176 0-.346.07-.471.195v0zM2.717 25h15.5c.454 0 .89-.182 1.213-.504.322-.322.503-.758.503-1.213v-3.464l-.536.928c-.193.336-.467.62-.797.824v1.712c0 .101-.041.199-.113.27-.072.073-.17.113-.27.114h-15.5c-.101 0-.199-.041-.27-.113-.073-.072-.113-.17-.114-.271V2.717c0-.101.041-.199.113-.27.072-.073.17-.113.271-.114h15.5c.1 0 .198.041.27.113.072.072.113.17.113.271v6.848l1.333-2.309V2.717c0-.455-.181-.891-.503-1.213C19.108 1.182 18.67 1 18.216 1H2.717c-.455 0-.891.182-1.213.504C1.182 1.826 1 2.262 1 2.717v20.566c0 .455.182.891.504 1.213.322.322.758.504 1.213.504v0zm12.972-3.595l2.045-1.18c.115-.067.21-.162.277-.277l6.916-11.979c.072-.125.092-.275.054-.415-.037-.14-.129-.26-.255-.333l-1.72-.992c-.062-.036-.13-.06-.202-.07-.071-.008-.143-.004-.213.015-.07.018-.135.05-.192.094-.057.044-.105.099-.14.161l-6.916 11.978c-.067.115-.101.246-.101.378v2.362c0 .052.014.103.04.149.026.045.064.082.11.109.044.026.096.04.148.04.052 0 .104-.014.149-.04v0z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
+        </li>
+        <li>
+          <button type="button" title="노트" class="css-orgeeu" onclick="showRepl()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="24" height="26">
+              <rect width="256" height="256" fill="none" />
+              <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12" points="64 88 16 128 64 168" />
+              <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12" points="192 88 240 128 192 168" />
+              <line x1="160" x2="96" y1="40" y2="216" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12" />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <aside id="description-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(0); display: flex;">
+      <div class="flex">
+        <p class="text-xl font-bold pt-4 flex-1">콘텐츠 정보</p>
+        <button class="text-xl font-bold pt-4" onclick="hidePage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
+        </button>
+      </div>
+      <p class="text-xl font-normal pt-4">{{content.title}}</p>
+      <p class="text-base font-light pt-4">등록자: {{content.user_name}}</p>
+      <div class="flex">
+        <p class="text-base font-light pt-1 flex-1">조회수 {{content.view_count}}회</p>
+        <p class="text-base font-light pt-1"><span class="text-red-600">❤</span> {{ content.like_count }}</p>
+      </div>
+      <div id="viewer"></div>
+    </aside>
+    <aside id="repl-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
+      <div class="flex mb-5">
+        <p class="text-xl font-bold pt-4 flex-1">Python Shell</p>
+        <button class="text-xl font-bold pt-4" onclick="hidePage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
+        </button>
+      </div>
+      <py-repl>
+        a = 100
+        print(a)
+        print("Hello World")
+      </py-repl>
+    </aside>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css" />
+    <!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" /> -->
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <script>
+      {% autoescape off %}
+      let content = `{{content.description}}`;
+      {% endautoescape %}
+
+      const Viewer = toastui.Editor;
+      const viewer = new Viewer({
+        el: document.querySelector('#viewer'),
+        // initialValue: content
+      });
+      viewer.setMarkdown(content);
+
+      function showDescription() {
+        initPage();
+        let status = document.getElementById('description-page').style.transform;
+        if (status === 'translateX(480px)' ) {
+          document.getElementById('video').style.marginRight = '561px';
+          document.getElementById('description-page').style.transform = 'translateX(0px)';
+        } else {
+          document.getElementById('video').style.marginRight = '81px';
+          document.getElementById('description-page').style.transform = 'translateX(480px)';
+        }
+      }
+      
+      function showEditor() {
+        
+      }
+      
+      function showNote() {
+        
+      }
+      
+      function showRepl() {
+        initPage();
+        let status = document.getElementById('repl-page').style.transform;
+        if (status === 'translateX(480px)' ) {
+          document.getElementById('video').style.marginRight = '561px';
+          document.getElementById('repl-page').style.transform = 'translateX(0px)';
+        } else {
+          document.getElementById('video').style.marginRight = '81px';
+          document.getElementById('repl-page').style.transform = 'translateX(480px)';
+        }
+      }
+
+      function initPage(){
+        document.getElementById('description-page').style.transform = 'translateX(480px)';
+        document.getElementById('repl-page').style.transform = 'translateX(480px)';
+      }
+
+      function hidePage(){
+        document.getElementById('description-page').style.transform = 'translateX(480px)';
+        document.getElementById('repl-page').style.transform = 'translateX(480px)';
+        document.getElementById('video').style.marginRight = '81px';
+        document.getElementById('description-page').style.transform = 'translateX(480px)';
+      }
+    </script>
+  </body>
+</html>

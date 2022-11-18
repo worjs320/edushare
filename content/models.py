@@ -9,6 +9,7 @@ class Content(models.Model):
     title = models.CharField(max_length=200)
     youtube_link = models.CharField(max_length=200)
     youtube_thumbnail = models.CharField(max_length=200, default='')
+    youtube_code = models.CharField(max_length=200, default='', null=True)
     description = models.TextField()
     view_count = models.IntegerField()
     like_count = models.IntegerField()
