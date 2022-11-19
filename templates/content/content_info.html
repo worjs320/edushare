@@ -82,6 +82,10 @@
         margin-right: 20px;
         margin-top: -25px;
       }
+
+      .sidebar-active {
+        background: #d8d8d8;
+      }
     </style>
   </head>
 
@@ -92,8 +96,8 @@
     </div>
     <div id="sidebar" class="bg-slate-100" style="width: 80px; display: flex;">
       <ul data-testid="sidebar">
-        <li>
-          <button type="button" title="콘텐츠 정보" class="css-orgeeu" onclick="showDescription()">
+        <li id="description-menu" class="sidebar-active">
+          <button type="button" title="콘텐츠 정보" class="css-orgeeu" onclick="activePage('description')">
             <svg width="24" height="19" viewBox="0 0 24 19">
               <title>콘텐츠 정보</title>
               <path
@@ -104,10 +108,10 @@
             </svg>
           </button>
         </li>
-        <li>
-          <button type="button" title="커뮤니티" class="css-orgeeu" onclick="showNote()">
+        <li id="note-menu">
+          <button type="button" title="학습 노트" class="css-orgeeu" onclick="activePage('note')">
             <svg width="24" height="24" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="comment-alt-dots" role="img" viewBox="0 0 512 512">
-              <title>CommentIcon</title>
+              <title>학습 노트</title>
               <path
                 fill="#212529"
                 d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 9.8 11.2 15.5 19.1 9.7L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zM128 240c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"
@@ -115,10 +119,10 @@
             </svg>
           </button>
         </li>
-        <li>
-          <button type="button" title="노트" class="css-orgeeu" onclick="showEditor()">
+        <li id="write-menu">
+          <button type="button" title="학습 노트 작성" class="css-orgeeu" onclick="activePage('write')">
             <svg width="24" height="26" viewBox="0 0 26 26">
-              <title>학습 노트</title>
+              <title>학습 노트 작성</title>
               <path
                 fill="#212529"
                 fill-rule="evenodd"
@@ -128,8 +132,8 @@
             </svg>
           </button>
         </li>
-        <li>
-          <button type="button" title="노트" class="css-orgeeu" onclick="showRepl()">
+        <li id="repl-menu">
+          <button type="button" title="Python Shell" class="css-orgeeu" onclick="activePage('repl')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="24" height="26">
               <rect width="256" height="256" fill="none" />
               <polyline fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="12" points="64 88 16 128 64 168" />
@@ -153,7 +157,24 @@
         <p class="text-base font-light pt-1 flex-1">조회수 {{content.view_count}}회</p>
         <p class="text-base font-light pt-1"><span class="text-red-600">❤</span> {{ content.like_count }}</p>
       </div>
+      <hr class="mt-5 mb-5">
       <div id="viewer"></div>
+    </aside>
+    <aside id="note-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
+      <div class="flex mb-5">
+        <p class="text-xl font-bold pt-4 flex-1">학습 노트</p>
+        <button class="text-xl font-bold pt-4" onclick="hidePage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
+        </button>
+      </div>
+    </aside>
+    <aside id="write-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
+      <div class="flex mb-5">
+        <p class="text-xl font-bold pt-4 flex-1">학습 노트 작성</p>
+        <button class="text-xl font-bold pt-4" onclick="hidePage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
+        </button>
+      </div>
     </aside>
     <aside id="repl-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
       <div class="flex mb-5">
@@ -170,8 +191,7 @@
     </aside>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css" />
-    <!-- <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" /> -->
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <script defer src="{% static '/js/pyscript.js' %}"></script>
     <script>
       {% autoescape off %}
       let content = `{{content.description}}`;
@@ -184,48 +204,42 @@
       });
       viewer.setMarkdown(content);
 
-      function showDescription() {
+      function activePage(pageName) {
+        let page = pageName + '-page';
+        let pageMenu = pageName + '-menu';
         initPage();
-        let status = document.getElementById('description-page').style.transform;
+        let status = document.getElementById(page).style.transform;
         if (status === 'translateX(480px)' ) {
           document.getElementById('video').style.marginRight = '561px';
-          document.getElementById('description-page').style.transform = 'translateX(0px)';
+          document.getElementById(page).style.transform = 'translateX(0px)';
         } else {
           document.getElementById('video').style.marginRight = '81px';
-          document.getElementById('description-page').style.transform = 'translateX(480px)';
+          document.getElementById(page).style.transform = 'translateX(480px)';
         }
-      }
-      
-      function showEditor() {
-        
-      }
-      
-      function showNote() {
-        
-      }
-      
-      function showRepl() {
-        initPage();
-        let status = document.getElementById('repl-page').style.transform;
-        if (status === 'translateX(480px)' ) {
-          document.getElementById('video').style.marginRight = '561px';
-          document.getElementById('repl-page').style.transform = 'translateX(0px)';
-        } else {
-          document.getElementById('video').style.marginRight = '81px';
-          document.getElementById('repl-page').style.transform = 'translateX(480px)';
-        }
+        document.getElementById(pageMenu).className = 'sidebar-active';
       }
 
       function initPage(){
         document.getElementById('description-page').style.transform = 'translateX(480px)';
+        document.getElementById('note-page').style.transform = 'translateX(480px)';
+        document.getElementById('write-page').style.transform = 'translateX(480px)';
         document.getElementById('repl-page').style.transform = 'translateX(480px)';
+        let liElement = document.querySelectorAll('#sidebar li');
+        for(let i = 0; i < liElement.length; i++) {
+          liElement[i].className = '';
+        }
       }
 
       function hidePage(){
         document.getElementById('description-page').style.transform = 'translateX(480px)';
+        document.getElementById('note-page').style.transform = 'translateX(480px)';
+        document.getElementById('write-page').style.transform = 'translateX(480px)';
         document.getElementById('repl-page').style.transform = 'translateX(480px)';
         document.getElementById('video').style.marginRight = '81px';
-        document.getElementById('description-page').style.transform = 'translateX(480px)';
+        let liElement = document.querySelectorAll('#sidebar li');
+        for(let i = 0; i < liElement.length; i++) {
+          liElement[i].className = '';
+        }
       }
     </script>
   </body>
