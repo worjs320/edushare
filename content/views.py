@@ -37,4 +37,6 @@ def content_add(request):
 
 def content_info(request, pk):
     content = Content.objects.get(pk=pk)
+    content.view_count += 1
+    content.save()
     return render(request, 'content/content_info.html', {'content': content})
