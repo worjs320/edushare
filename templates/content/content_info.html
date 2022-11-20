@@ -79,12 +79,28 @@
 
       #btnRun {
         right: 0px;
-        margin-right: 20px;
+        margin-right: 30px;
         margin-top: -25px;
       }
 
       .sidebar-active {
         background: #d8d8d8;
+      }
+
+      .py-repl-box {
+        display: block;
+        border: 1px solid lightgray;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .output {
+        display: block;
+        border: 1px solid lightgray;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
       }
     </style>
   </head>
@@ -183,10 +199,9 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
         </button>
       </div>
-      <py-repl>
-        a = 100
-        print(a)
-        print("Hello World")
+      <py-repl auto-generate="true">
+        name=input("What is your name?")
+        print(name + ", Welcome to Edushare.")
       </py-repl>
     </aside>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
