@@ -32,7 +32,7 @@
       </a>
     </div>
   </div>
-  <div class="relative"><img class="w-full" src="{% static '/img/background.png' %}">
+  <div class="relative h-44 z-0"><img class="w-full" src="{% static '/img/background.png' %}">
     <p class="body-title">다양한 콘텐츠를 등록하고 학습해보세요
       {% if user.is_authenticated %}
       <br>
@@ -44,19 +44,19 @@
     <div class="p-8 pt-0">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
         {% for content in contents.all %}
-        <div class="p-4 rounded-md items-center justify-center h-200 shadow sm:overflow-hidden sm:rounded-md">
+        <div class="p-4 rounded-xl items-center justify-center h-200 shadow sm:overflow-hidden border-inherit border z-10">
           <div class="group relative">
-            <div class="aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none">
+            <div class="aspect-h-1 w-full overflow-hidden rounded-xl bg-gray-200 group-hover:opacity-75 lg:aspect-none">
               <a href="/content/{{content.pk}}">
-                <img src="{{ content.youtube_thumbnail }}" alt=""
+                <img src="https://img.youtube.com/vi/{{ content.youtube_id }}/mqdefault.jpg" alt=""
                 class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
               </a>
             </div>
             <div class="mt-4 flex justify-between">
               <div class="overflow-hidden">
-                <h3 class="text-mx text-gray-700 overflow-hidden text-ellipsis">
-                  <a href="/content/{{content.pk}}">{{ content.title }}</a>
-                </h3>
+                <div class="text-mx text-gray-700 overflow-hidden text-ellipsis mr-3">
+                  <a class="line-clamp-2 font-bold leading-5" href="/content/{{content.pk}}">{{ content.title }}</a>
+                </div>
                 <p class="mt-2 text-sm text-gray-500">{{ content.user_name }}</p>
               </div>
               <p class="text-sm font-medium text-gray-900 whitespace-nowrap"><span class="text-red-600">❤</span> {{ content.like_count }}
@@ -72,3 +72,4 @@
 {% endblock %}
 {% include 'common/footer.html' %}
 </html>
+

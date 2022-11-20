@@ -14,21 +14,14 @@ def content_add(request):
       content.user_id = User.objects.get(username=request.user.username)
       content.user_name = User.objects.get(username=request.user.username).first_name
     content.title = request.POST['title']
-    
-    youtube_link = request.POST['youtube_link']
-
-    parsed_youtube_link = urlparse(youtube_link)
-    youtube_code = parse_qs(parsed_youtube_link.query)['v'][0]
-
-    content.youtube_link = youtube_code
-    content.youtube_code = parse_qs(parsed_youtube_link.query)['v'][0]
-    youtube_thumbnail = 'https://img.youtube.com/vi/' + parse_qs(parsed_youtube_link.query)['v'][0] + '/0.jpg'
-    
-    content.youtube_thumbnail = youtube_thumbnail
     content.description = request.POST['description']
     content.view_count = 0
     content.like_count = 0
-
+    
+    youtube_link = request.POST['youtube_link']
+    parsed_youtube_link = urlparse(youtube_link)
+    content.youtube_id = parse_qs(parsed_youtube_link.query)['v'][0]
+    
     content.save()
 
     return redirect('/content')
