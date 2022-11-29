@@ -192,11 +192,16 @@
         </button>
       </div>
       <hr class="mt-5 mb-5">
-      <div id="editor" class="mt-1">
-      </div>
-      <div class="flex">
-        <a href='#' class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</a>
-      </div>
+      <form action="/content/{{content.id}}/note/add" method="POST" onsubmit="submitWork();">
+        {% csrf_token %}
+        <input name="description" id="description">
+        <div id="editor" class="mt-1">
+        </div>
+        <div class="flex">
+          <button type="submit" class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</button>
+          <!-- <a href='javascript:addNote()' class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</a> -->
+        </div>
+      </form>
     </aside>
     <aside id="repl-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
       <div class="flex mb-5">
@@ -280,8 +285,11 @@
           ['scrollSync'],
         ]
       });
-      console.log(1)
-      
+
+      function submitWork() {
+        let description = editor.getHTML();
+        document.getElementById('description').value = description;
+      }
     </script>
     {% include 'common/footer.html' %}
   </body>

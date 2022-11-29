@@ -1,7 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
-from .models import Content
+from django.http import JsonResponse
 from urllib.parse import urlparse, parse_qs
+from .models import Content
+from .models import Note
 
 def content_list(request):
   contents = Content.objects
@@ -28,8 +30,25 @@ def content_add(request):
   else:
     return render(request, 'content/content_add.html', {})
 
-def content_info(request, pk):
-    content = Content.objects.get(pk=pk)
+def content_info(request, content_pk):
+    content = Content.objects.get(pk=content_pk)
+    notes = Note.objects.filter(content=content_pk)
     content.view_count += 1
     content.save()
-    return render(request, 'content/content_info.html', {'content': content})
+    return render(request, 'content/content_info.html', {'content': content, 'notes': notes})
+
+def note_add(request, content_pk):
+  if request.method == 'POST':
+    note = Note()
+    content = Content.objects.get(pk=content_pk)
+
+    note.description = request.POST['description']
+    note.content = content
+
+    if request.user.is_authenticated:
+      note.user_id = User.objects.get(username=request.user.username)
+      note.user_name = User.objects.get(username=request.user.username).first_name
+
+    note.save()
+
+    return JsonResponse({"result":"success"})
