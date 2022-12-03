@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from urllib.parse import urlparse, parse_qs
+import json
 from .models import Content
 from .models import Note
 
@@ -41,8 +42,9 @@ def note_add(request, content_pk):
   if request.method == 'POST':
     note = Note()
     content = Content.objects.get(pk=content_pk)
+    request_data = json.loads(request.body)
 
-    note.description = request.POST['description']
+    note.description = request_data["description"]
     note.content = content
 
     if request.user.is_authenticated:

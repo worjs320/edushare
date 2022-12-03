@@ -102,6 +102,10 @@
         padding: 10px;
         border-radius: 5px;
       }
+
+      py-loader {
+        display: none;
+      }
     </style>
   </head>
 
@@ -192,14 +196,14 @@
         </button>
       </div>
       <hr class="mt-5 mb-5">
-      <form action="/content/{{content.id}}/note/add" method="POST" onsubmit="submitWork();">
+      <form method="POST">
         {% csrf_token %}
         <input name="description" id="description">
         <div id="editor" class="mt-1">
         </div>
         <div class="flex">
-          <button type="submit" class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</button>
-          <!-- <a href='javascript:addNote()' class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</a> -->
+          <!-- <button type="submit" class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</button> -->
+          <a href='javascript:addNote();' class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</a>
         </div>
       </form>
     </aside>
@@ -286,9 +290,32 @@
         ]
       });
 
-      function submitWork() {
+      function addNote() {
         let description = editor.getHTML();
-        document.getElementById('description').value = description;
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        const config = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({
+            description: description
+          }),
+        };
+        
+        fetch("/content/{{content.id}}/note/add", config)
+          .then(response => response.json())
+          .then(data => {
+            if (data.result) {
+              alert('학습 노트 작성 성공');
+              editor.reset();
+            } else {
+              alert('학습 노트 작성 실패')
+            }
+          })
+          .catch(error => alert('학습 노트 작성 실패'));
       }
     </script>
     {% include 'common/footer.html' %}
