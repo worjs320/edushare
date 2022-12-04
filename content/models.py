@@ -24,6 +24,7 @@ class Content(models.Model):
 class Note(models.Model):
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     user_name = models.CharField(max_length=200, null=True)
+    title = models.TextField(null=True)
     description = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
@@ -34,4 +35,4 @@ class Note(models.Model):
         self.save()
 
     def __str__(self):
-        return self.content.title + '에 대한 댓글'
+        return self.title

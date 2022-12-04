@@ -165,12 +165,13 @@
       </ul>
     </div>
     <aside id="description-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(0); display: flex;">
-      <div class="flex">
+      <div class="flex mb-5">
         <p class="text-xl font-bold pt-4 flex-1">콘텐츠 정보</p>
         <button class="text-xl font-bold pt-4" onclick="hidePage()">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
         </button>
       </div>
+      <hr>
       <p class="text-xl font-normal pt-4">{{content.title}}</p>
       <p class="text-base font-light pt-4">등록자: {{content.user_name}}</p>
       <div class="flex">
@@ -180,12 +181,15 @@
       <hr class="mt-5 mb-5">
       <div id="viewer"></div>
     </aside>
-    <aside id="note-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
+    <aside id="note-page" class="sidebar-page pl-5 pr-5 overflow-x-scroll" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
       <div class="flex mb-5">
         <p class="text-xl font-bold pt-4 flex-1">학습 노트</p>
         <button class="text-xl font-bold pt-4" onclick="hidePage()">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
         </button>
+      </div>
+      <hr>
+      <div id="notes-area" class="grid grid-flow-row auto-rows-max">
       </div>
     </aside>
     <aside id="write-page" class="sidebar-page pl-5 pr-5" style="transition: all 0.5s linear; transform: translateX(480px); display: flex;">
@@ -195,14 +199,16 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
         </button>
       </div>
-      <hr class="mt-5 mb-5">
+      <hr>
       <form method="POST">
         {% csrf_token %}
         <input name="description" id="description">
+        <label for="title" class="block text-sm font-medium text-gray-700 bm">학습노트 제목</label>
+        <input type="text" name="title" id="title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm mb-5" />
+        <label for="editor" class="block text-sm font-medium text-gray-700">학습노트 내용</label>
         <div id="editor" class="mt-1">
         </div>
         <div class="flex">
-          <!-- <button type="submit" class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</button> -->
           <a href='javascript:addNote();' class="inline-flex justify-center rounded border border-transparent bg-indigo-600 py-1 px-3 text-sm text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer mt-3 ml-auto">저장</a>
         </div>
       </form>
@@ -214,6 +220,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 1 1 13M1 1l12 12"/></svg>
         </button>
       </div>
+      <hr class="mb-5">
       <py-repl auto-generate="true">
         name=input("What is your name?")
         print(name + ", Welcome to Edushare.")
@@ -248,6 +255,10 @@
           document.getElementById(page).style.transform = 'translateX(480px)';
         }
         document.getElementById(pageMenu).className = 'sidebar-active';
+
+        if (pageName === 'note') {
+          getNotes();
+        }
       }
 
       function initPage(){
@@ -291,6 +302,7 @@
       });
 
       function addNote() {
+        let title = document.querySelector('[name=title]').value;
         let description = editor.getHTML();
         let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         
@@ -301,6 +313,7 @@
             'X-CSRFToken': csrftoken
           },
           body: JSON.stringify({
+            title: title,
             description: description
           }),
         };
@@ -316,6 +329,50 @@
             }
           })
           .catch(error => alert('학습 노트 작성 실패'));
+      }
+
+      function getNotes() {
+        let notesArea = document.getElementById('notes-area');
+        while(notesArea.firstChild) notesArea.removeChild(notesArea.firstChild)
+
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const config = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrftoken
+          }
+        };
+
+        fetch("/content/{{content.id}}/note/", config)
+          .then(response => response.json())
+          .then(notes => {
+            for (let i=0; i< notes.length; i++) {
+              let note = notes[i];
+              console.log(note);
+              let date = new Date(note.fields.created_date);
+              let dateFormat = date.getFullYear() + '년 ' + (date.getMonth()+1) + '월 '+ date.getDate() + '일 '+ date.getHours() + '시 ' + date.getMinutes() + '분 '
+              let html = `<div class="rounded items-center justify-center h-200 shadow sm:overflow-hidden border-inherit border z-10 mt-5">
+                <div class="flex place-content-between px-3 py-1 items-center text-sm">
+                  <div class="flex items-center text-black"><img class="mr-2 w-6 h-6 rounded-full inline" src="/static/img/default_avatar.png" alt="user photo"> ${note.fields.user_name}</div>
+                  <div class="text-slate-600">${dateFormat}</div>
+                </div>
+                <div class="border-t-2">
+                  <div class="px-3 py-1 font-bold text-base">${note.fields.title}</div>
+                  <div id="note-${note.pk}-description" class="px-3 py-1"></div>
+                </div>
+              </div>`
+              document.getElementById('notes-area').insertAdjacentHTML('beforeend', html);
+
+              let description = new Viewer({
+                el: document.querySelector('#note-' + note.pk + '-description'),
+                viewer: true,
+                initialValue: ''
+              });
+              description.setMarkdown(note.fields.description);
+            }
+          })
+          .catch(error => console.log(error));
       }
     </script>
     {% include 'common/footer.html' %}

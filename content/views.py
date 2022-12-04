@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from urllib.parse import urlparse, parse_qs
+from django.core import serializers
 import json
 from .models import Content
 from .models import Note
@@ -44,6 +45,7 @@ def note_add(request, content_pk):
     content = Content.objects.get(pk=content_pk)
     request_data = json.loads(request.body)
 
+    note.title = request_data["title"]
     note.description = request_data["description"]
     note.content = content
 
@@ -54,3 +56,8 @@ def note_add(request, content_pk):
     note.save()
 
     return JsonResponse({"result":"success"})
+
+def note_list(request, content_pk):
+  notes = Note.objects.filter(content=content_pk)
+  notes = serializers.serialize('json', notes)
+  return HttpResponse(notes, content_type="application/json")
