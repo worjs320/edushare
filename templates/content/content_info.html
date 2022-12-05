@@ -112,7 +112,7 @@
   <body>
     {% include 'common/top.html' %}
     <div id='video' class="flex" style="height: calc(100vh - 64px); min-height: calc(100vh - 64px); margin-right: 561px">
-        <iframe src="https://www.youtube.com/embed/{{content.youtube_id}}" type="video/mp4" style="width: 100%; height: 100%"></iframe>
+        <iframe id="videoSource" src="https://www.youtube.com/embed/{{content.youtube_id}}" type="video/mp4" style="width: 100%; height: 100%"></iframe>
     </div>
     <div id="sidebar" class="bg-slate-100" style="width: 80px; display: flex;">
       <ul data-testid="sidebar">
@@ -241,6 +241,7 @@
         initialValue: ''
       });
       viewer.setMarkdown(content);
+	  setTimeMoveEvent();
 
       function activePage(pageName) {
         let page = pageName + '-page';
@@ -371,10 +372,26 @@
               });
               description.setMarkdown(note.fields.description);
             }
+			setTimeMoveEvent();
           })
           .catch(error => console.log(error));
       }
+
+	  function setTimeMoveEvent() {
+		const elements = document.querySelectorAll('.time-move-btn');
+		elements.forEach(element => {
+		  element.addEventListener('click', function handleClick(event) {
+			element.setAttribute('href', `javascript:timeMove('${element.innerText}');`);
+		  });
+		});
+	  }
+
+	  function timeMove(time) {
+		alert(time);
+		document.getElementById('videoSource').src = 'https://www.youtube.com/embed/{{content.youtube_id}}?start=53';
+	  }
     </script>
     {% include 'common/footer.html' %}
   </body>
 </html>
+<!-- cursor-pointer -->

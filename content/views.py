@@ -6,6 +6,7 @@ from django.core import serializers
 import json
 from .models import Content
 from .models import Note
+import re
 
 def content_list(request):
   contents = Content.objects
@@ -18,7 +19,21 @@ def content_add(request):
       content.user_id = User.objects.get(username=request.user.username)
       content.user_name = User.objects.get(username=request.user.username).first_name
     content.title = request.POST['title']
-    content.description = request.POST['description']
+    description = request.POST['description']
+
+    hour_pattern = re.findall('\[[1-9]:[0-5][0-9]:[0-5][0-9]\]', description)
+    for pattern in hour_pattern:
+	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')
+
+    minute_pattern_one = re.findall('\[[0-9]:[0-5][0-9]\]', description)
+    for pattern in minute_pattern_one:
+	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')
+		
+    minute_pattern_two = re.findall('\[[0-5][0-9]:[0-5][0-9]\]', description)
+    for pattern in minute_pattern_two:
+	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')
+
+    content.description = description
     content.view_count = 0
     content.like_count = 0
     
