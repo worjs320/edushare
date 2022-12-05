@@ -86,7 +86,7 @@ def note_add(request, content_pk):
 
     return JsonResponse({"result":"success"})
 
-def note_list(request, content_pk):
+def note_list(content_pk):
   notes = Note.objects.filter(content=content_pk)
   notes = serializers.serialize('json', notes)
   return HttpResponse(notes, content_type="application/json")

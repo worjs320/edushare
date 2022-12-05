@@ -241,7 +241,7 @@
         initialValue: ''
       });
       viewer.setMarkdown(content);
-	  setTimeMoveEvent();
+	    setTimeMoveEvent();
 
       function activePage(pageName) {
         let page = pageName + '-page';
@@ -324,7 +324,9 @@
           .then(data => {
             if (data.result) {
               alert('학습 노트 작성 성공');
+              document.getElementById('title').value = '';
               editor.reset();
+              window.setTimeout(() => document.getElementById('title').focus(), 0);
             } else {
               alert('학습 노트 작성 실패')
             }
