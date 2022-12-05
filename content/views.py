@@ -61,7 +61,21 @@ def note_add(request, content_pk):
     request_data = json.loads(request.body)
 
     note.title = request_data["title"]
-    note.description = request_data["description"]
+    description = request_data['description']
+
+    hour_pattern = re.findall('\[[1-9]:[0-5][0-9]:[0-5][0-9]\]', description)
+    for pattern in hour_pattern:
+	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')
+
+    minute_pattern_one = re.findall('\[[0-9]:[0-5][0-9]\]', description)
+    for pattern in minute_pattern_one:
+	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')
+		
+    minute_pattern_two = re.findall('\[[0-5][0-9]:[0-5][0-9]\]', description)
+    for pattern in minute_pattern_two:
+	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')
+
+    note.description = description
     note.content = content
 
     if request.user.is_authenticated:
