@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout as django_logout
 from django.contrib.auth.models import User
+from content.models import Content
 
 def index(request):
   return redirect('/content')
@@ -41,3 +42,11 @@ def signin(request):
 def logout(request):
   django_logout(request)
   return redirect('/content')
+
+def mycontent(request):
+  user = User.objects.get(username=request.user.username)
+  contents = Content.objects.filter(user_id=user)
+  return render(request, 'app/my-content.html', {'contents': contents})
+
+# def mynote(request):
+#   return render(request, 'app/my-note.html', {})
