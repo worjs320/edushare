@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>EduShare</title>
+  {% include 'common/html_head.html' %}
+</head>
+
+<body>
+  {% include 'common/top.html' %}
+  {% block content %}
+  <div class="header-snb text-base">
+    <div class="container">
+      <a class="sub-navigation" href="/content/">
+        <div>콘텐츠</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>재생 목록</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>랭킹</div>
+      </a>
+      <a class="sub-navigation active" href="">
+        <div>마이페이지</div>
+      </a>
+    </div>
+  </div>
+  <div class="w-full h-10 bg-indigo-400 z-10 mb-10">
+    <div class="container h-full flex align-center items-center text-white px-5 text-xl">> 작성한 학습 노트</div>
+  </div>
+  <!-- <div class="z-0 relative"><img class="w-full" src="{% static '/img/background.png' %}">
+    <p class="body-title">작성한 콘텐츠</p>
+  </div> -->
+  <div class="container flex">
+    <div class="z-10 w-52 px-5">
+      <div class="menu_container">
+        <p class="my-4 text-sm text-slate-400">설정</p>
+        <ul> 
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/users/me">
+              <span>프로필</span>
+            </a>
+          </li>
+        </ul>
+        <p class="my-4 text-sm text-slate-400">학습 관리</p>
+        <ul> 
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/my-watch">
+              <span>내 학습</span>
+            </a>
+          </li>
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/my-content">
+              <span>작성한 콘텐츠</span>
+            </a>
+          </li>
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block sidebar-active" href="/my-note">
+              <span>작성한 학습 노트</span>
+            </a>
+          </li>
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/my-like">
+              <span>좋아요</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="p-8 pt-0 flex-1">
+      <div id="notes-area"></div>
+    </div>
+  </div>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script>
+    getMyNotes();
+
+    const Viewer = toastui.Editor.factory;
+
+    function getMyNotes() {
+        let notesArea = document.getElementById('notes-area');
+        while(notesArea.firstChild) notesArea.removeChild(notesArea.firstChild)
+
+        // let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const config = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // 'X-CSRFToken': csrftoken
+          }
+        };
+
+        fetch("/my-note-list", config)
+          .then(response => response.json())
+          .then(notes => {
+            console.log(notes);
+            for (let i=0; i< notes.length; i++) {
+              let note = notes[i];
+              console.log(note);
+              let date = new Date(note.fields.created_date);
+              let dateFormat = date.getFullYear() + '년 ' + (date.getMonth()+1) + '월 '+ date.getDate() + '일 '+ date.getHours() + '시 ' + date.getMinutes() + '분 '
+              let html = `<div class="rounded items-center justify-center h-200 shadow sm:overflow-hidden border-inherit border z-10 mt-5">
+                <div class="flex place-content-between px-3 py-1 items-center text-sm">
+                  <div class="flex items-center text-black"><img class="mr-2 w-6 h-6 rounded-full inline" src="/static/img/default_avatar.png" alt="user photo"> ${note.fields.user_name}</div>
+                  <div class="text-slate-600">${dateFormat}</div>
+                </div>
+                <div class="border-t-2">
+                  <div class="px-3 py-1 font-bold text-base">${note.fields.title}</div>
+                  <div id="note-${note.pk}-description" class="px-3 py-1"></div>
+                </div>
+              </div>`
+              document.getElementById('notes-area').insertAdjacentHTML('beforeend', html);
+
+              let description = new Viewer({
+                el: document.querySelector('#note-' + note.pk + '-description'),
+                viewer: true,
+                initialValue: ''
+              });
+              description.setMarkdown(note.fields.description);
+            }
+			      // setTimeMoveEvent();
+          })
+          .catch(error => console.log(error));
+      }
+  </script>
+</body>
+{% endblock %}
+{% include 'common/footer.html' %}
+</html>
