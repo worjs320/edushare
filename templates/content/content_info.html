@@ -176,7 +176,16 @@
       <p class="text-base font-light pt-4">등록자: {{content.user_name}}</p>
       <div class="flex">
         <p class="text-base font-light pt-1 flex-1">조회수 {{content.view_count}}회</p>
-        <p class="text-base font-light pt-1"><span class="text-red-600">❤</span> {{ content.like_count }}</p>
+        <a href="javascript:like()">
+          <p class="text-base font-light pt-1">
+            {%if request.user in blog.like.all%}
+            <span id="like_icon" class="text-red-600">♡</span> 
+            {%else%}
+            <span id="like_icon" class="text-red-600">♥</span> 
+            {%endif%}
+            <span id="like_count">{{ content.like.count }}</span>
+          </p>
+        </a>
       </div>
       <hr class="mt-5 mb-5">
       <div id="viewer"></div>
@@ -399,6 +408,33 @@
 
         document.getElementById('videoSource').src = 'https://www.youtube.com/embed/{{content.youtube_id}}?autoplay=1&start=' + second;
       }
+
+      function like() {
+        let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        const config = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': csrftoken
+          }
+        };
+        
+        fetch("/content/{{content.id}}/like", config)
+          .then(response => response.json())
+          .then(data => {
+            if (data.result) {
+              document.getElementById('like_count').innerText = data.like_count
+
+              if (data.action == 'like') {
+                document.getElementById('like_icon').innerText = '♥'
+              } else if(data.action == 'like_cancle') {
+                document.getElementById('like_icon').innerText = '♡'
+              }
+            }
+          })
+          .catch(error => alert('좋아요 누르기 실패'));
+        }
     </script>
     {% include 'common/footer.html' %}
   </body>

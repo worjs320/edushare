@@ -90,3 +90,23 @@ def note_list(content_pk):
   notes = Note.objects.filter(content=content_pk)
   notes = serializers.serialize('json', notes)
   return HttpResponse(notes, content_type="application/json")
+
+def like(request, content_pk):
+  content = Content.objects.get(pk=content_pk) 
+  
+  if not request.user.is_authenticated:
+      message = "로그인을 해주세요"
+      context = {'like_count' : content.like.count(), "message": message}
+      return HttpResponse(json.dumps(context), content_type='application/json')
+
+  user = request.user
+  
+  if content.like.filter(id = user.id).exists():
+      content.like.remove(user)
+      action = "like_cancle"
+  else:
+      content.like.add(user)
+      action = "like" 
+
+  context = {"result": "success", "action": action, "like_count" : content.like.count()}
+  return HttpResponse(json.dumps(context), content_type='application/json') 

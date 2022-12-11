@@ -10,7 +10,7 @@ class Content(models.Model):
     youtube_id = models.CharField(max_length=200, default='', null=True)
     description = models.TextField()
     view_count = models.IntegerField()
-    like_count = models.IntegerField()
+    like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_count', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 
