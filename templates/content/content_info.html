@@ -139,6 +139,7 @@
             </svg>
           </button>
         </li>
+        {% if user.is_authenticated %}
         <li id="write-menu">
           <button type="button" title="학습 노트 작성" class="css-orgeeu" onclick="activePage('write')">
             <svg width="24" height="26" viewBox="0 0 26 26">
@@ -152,6 +153,7 @@
             </svg>
           </button>
         </li>
+        {% endif %}
         <li id="repl-menu">
           <button type="button" title="Python Shell" class="css-orgeeu" onclick="activePage('repl')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="24" height="26">
