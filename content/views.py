@@ -9,7 +9,11 @@ from .models import Note
 import re
 
 def content_list(request):
-  contents = Content.objects
+  title = request.GET.get('title', None)
+  if title == None:
+    contents = Content.objects
+  else:
+    contents = Content.objects.filter(title__icontains=title)
   return render(request, 'content/content_list.html', {'contents': contents})
 
 def content_add(request):
@@ -86,7 +90,7 @@ def note_add(request, content_pk):
 
     return JsonResponse({"result":"success"})
 
-def note_list(content_pk):
+def note_list(request, content_pk):
   notes = Note.objects.filter(content=content_pk)
   notes = serializers.serialize('json', notes)
   return HttpResponse(notes, content_type="application/json")

@@ -5,7 +5,12 @@
       <a class="sub-navigation-logo"><img src="" /></a>
       <div class="service-menu font-bold" id="serviceMenu"><a href="/content/"><img class="w-8 h-8 inline mr-1 mb-1" src="{% static '/img/logo.svg' %}" alt="logo">EduShare</a></div>
       <div class="icon-box">
-        <img class="icon search-icon" src="{% static '/css/search-icon.svg' %}" />
+        {% if request.path in '/content/' %}
+        <div class="flex mr-4">
+          <input type="text" id='search' class="rounded border-0 bg-slate-200" onkeyup="search()">
+          <span class="flex items-center relative"><img class="absolute right-2 w-6 h-6 max-w-none" src="{% static '/css/search-icon.svg' %}" /></span>
+        </div>
+        {% endif %}
         {% if user.is_authenticated %}
         <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName"
           class="flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 :hover:text-blue-500 md:mr-0 focus:ring-4 focus:ring-gray-100 :focus:ring-gray-700 :text-white"
@@ -32,13 +37,16 @@
           <ul class="py-1 text-sm text-gray-700 :text-gray-200"
             aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
             <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">내 학습</a>
+              <a href="/my-watch" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">내 학습</a>
             </li>
             <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">내 학습 노트</a>
+              <a href="/my-content" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">작성한 콘텐츠</a>
             </li>
             <li>
-              <a href="#" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">개인정보 수정</a>
+              <a href="/my-note" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">작성한 학습 노트</a>
+            </li>
+            <li>
+              <a href="/my-like" class="block py-2 px-4 hover:bg-gray-100 :hover:bg-gray-600 :hover:text-white">좋아요한 콘텐츠</a>
             </li>
           </ul>
           <div class="py-1">
@@ -56,3 +64,11 @@
     </div>
   </div>
 </div>
+<script>
+  function search() {
+    if (window.event.keyCode == 13) {
+      let searchText = document.getElementById('search').value;
+      window.location.href = '/content?title=' + searchText;
+    }
+  }
+</script>

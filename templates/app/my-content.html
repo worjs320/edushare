@@ -24,7 +24,7 @@
       <a class="sub-navigation" href="">
         <div>재생 목록</div>
       </a>
-      <a class="sub-navigation" href="">
+      <a class="sub-navigation" href="/rank">
         <div>랭킹</div>
       </a>
       <a class="sub-navigation active" href="">
@@ -41,14 +41,14 @@
   <div class="container flex">
     <div class="z-10 w-52 px-5">
       <div class="menu_container">
-        <p class="my-4 text-sm text-slate-400">설정</p>
+        <!-- <p class="my-4 text-sm text-slate-400">설정</p>
         <ul> 
           <li>
             <a class="px-3 py-2 text-base text-stone-700 block" href="/users/me">
               <span>프로필</span>
             </a>
           </li>
-        </ul>
+        </ul> -->
         <p class="my-4 text-sm text-slate-400">학습 관리</p>
         <ul> 
           <li>
@@ -74,9 +74,10 @@
         </ul>
       </div>
     </div>
-    <div class="p-8 pt-0">
+    <div class="p-8 pt-0 flex-1">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
         {% for content in contents.all %}
+          {% if request.user in content.like.all %}
         <div class="p-4 rounded-xl items-center justify-center h-200 shadow sm:overflow-hidden border-inherit border z-10">
           <div class="group relative">
             <div class="aspect-h-1 w-full overflow-hidden rounded-xl bg-gray-200 group-hover:opacity-75 lg:aspect-none">
@@ -92,11 +93,12 @@
                 </div>
                 <p class="mt-2 text-sm text-gray-500">{{ content.user_name }}</p>
               </div>
-              <p class="text-sm font-medium text-gray-900 whitespace-nowrap"><span class="text-red-600">❤</span> {{ content.like_count }}
+              <p class="text-sm font-medium text-gray-900 whitespace-nowrap"><span class="text-red-600">❤</span> {{ content.like.count }}
               </p>
             </div>
           </div>
         </div>
+          {% endif %}
         {% endfor %}
       </div>
     </div>

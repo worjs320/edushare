@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout as django_logout
-from django.http import JsonResponse
 from django.core import serializers
+from django.db.models import Count
 from django.contrib.auth.models import User
 from content.models import Content
 from content.models import Note
@@ -57,9 +57,17 @@ def mynote(request):
 
   return render(request, 'app/my-note.html', {'notes': notes })
 
+def mylike(request):
+  contents = Content.objects.filter(like=request.user)
+  return render(request, 'app/my-like.html', {'contents': contents})
+
 def mynote_list(request):
   user = User.objects.get(username=request.user.username)
   notes = Note.objects.filter(user_id=user)
   notes = serializers.serialize('json', notes)
-
   return HttpResponse(notes, content_type="application/json")
+
+def rank(request):
+  content_rank = Content.objects.all().values('user_name').annotate(count=Count('user_name')).order_by('-count')
+  note_rank = Note.objects.all().values('user_name').annotate(count=Count('user_name')).order_by('-count')
+  return render(request, 'app/rank.html', {'content_rank': content_rank, 'note_rank': note_rank})

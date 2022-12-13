@@ -18,13 +18,13 @@
   {% block content %}
   <div class="header-snb text-base">
     <div class="container">
-      <a class="sub-navigation active" href="/content/">
+      <a class="sub-navigation active" href="/content">
         <div>콘텐츠</div>
       </a>
       <a class="sub-navigation" href="">
         <div>재생 목록</div>
       </a>
-      <a class="sub-navigation" href="">
+      <a class="sub-navigation" href="/rank">
         <div>랭킹</div>
       </a>
       {% if user.is_authenticated %}
@@ -35,7 +35,12 @@
     </div>
   </div>
   <div class="relative z-0"><img class="w-full" src="{% static '/img/background.png' %}">
-    <p class="body-title">다양한 콘텐츠를 등록하고 학습해보세요
+    <p class="body-title">
+      {% if 'title' in request.GET %}
+        "{{request.GET.title}}" 검색 결과
+      {% else %}
+        다양한 콘텐츠를 등록하고 학습해보세요
+      {% endif %}
       {% if user.is_authenticated %}
       <br>
       <a href='/content/add' class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-1 px-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer">콘텐츠 등록</a>

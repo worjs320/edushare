@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>EduShare</title>
+  {% include 'common/html_head.html' %}
+</head>
+
+<body>
+  {% include 'common/top.html' %}
+  {% block content %}
+  <div class="header-snb text-base">
+    <div class="container">
+      <a class="sub-navigation" href="/content/">
+        <div>콘텐츠</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>재생 목록</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>랭킹</div>
+      </a>
+      <a class="sub-navigation active" href="">
+        <div>마이페이지</div>
+      </a>
+    </div>
+  </div>
+  <div class="w-full h-10 bg-indigo-400 z-10 mb-10">
+    <div class="container h-full flex align-center items-center text-white px-5 text-xl">> 작성한 콘텐츠</div>
+  </div>
+  <!-- <div class="z-0 relative"><img class="w-full" src="{% static '/img/background.png' %}">
+    <p class="body-title">작성한 콘텐츠</p>
+  </div> -->
+  <div class="container flex">
+    <div class="z-10 w-52 px-5">
+      <div class="menu_container">
+        <!-- <p class="my-4 text-sm text-slate-400">설정</p>
+        <ul> 
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/users/me">
+              <span>프로필</span>
+            </a>
+          </li>
+        </ul> -->
+        <p class="my-4 text-sm text-slate-400">학습 관리</p>
+        <ul> 
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/my-watch">
+              <span>내 학습</span>
+            </a>
+          </li>
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/my-content">
+              <span>작성한 콘텐츠</span>
+            </a>
+          </li>
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block" href="/my-note">
+              <span>작성한 학습 노트</span>
+            </a>
+          </li>
+          <li>
+            <a class="px-3 py-2 text-base text-stone-700 block sidebar-active" href="/my-like">
+              <span>좋아요</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="p-8 pt-0 flex-1">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+        {% for content in contents.all %}
+        <div class="p-4 rounded-xl items-center justify-center h-200 shadow sm:overflow-hidden border-inherit border z-10">
+          <div class="group relative">
+            <div class="aspect-h-1 w-full overflow-hidden rounded-xl bg-gray-200 group-hover:opacity-75 lg:aspect-none">
+              <a href="/content/{{content.pk}}">
+                <img src="https://img.youtube.com/vi/{{ content.youtube_id }}/mqdefault.jpg" alt=""
+                class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+              </a>
+            </div>
+            <div class="mt-4 flex justify-between">
+              <div class="overflow-hidden">
+                <div class="text-mx text-gray-700 overflow-hidden text-ellipsis mr-3 h-10">
+                  <a class="line-clamp-2 font-bold leading-5" href="/content/{{content.pk}}">{{ content.title }}</a>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">{{ content.user_name }}</p>
+              </div>
+              <p class="text-sm font-medium text-gray-900 whitespace-nowrap"><span class="text-red-600">❤</span> {{ content.like.count }}
+              </p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
+{% include 'common/footer.html' %}
+</html>

@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>EduShare</title>
+  {% include 'common/html_head.html' %}
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  <py-env>
+    - matplotlib
+    - numpy
+    - paths:
+      - /static/css/NanumBarunGothic.ttf
+      - /static/css/NanumBarunGothicBold.ttf
+  </py-env>
+</head>
+
+<body>
+  {% include 'common/top.html' %}
+  {% block content %}
+  <div class="header-snb text-base">
+    <div class="container">
+      <a class="sub-navigation" href="/content">
+        <div>콘텐츠</div>
+      </a>
+      <a class="sub-navigation" href="">
+        <div>재생 목록</div>
+      </a>
+      <a class="sub-navigation active" href="/rank">
+        <div>랭킹</div>
+      </a>
+      {% if user.is_authenticated %}
+      <a class="sub-navigation" href="/my-content">
+        <div>마이페이지</div>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="relative" style="z-index: -1;"><img class="w-full" src="{% static '/img/background.png' %}">
+    <p class="body-title">
+      콘텐츠와 학습 노트를 등록해서 랭킹 TOP5 안에 들어보세요!
+    </p>
+  </div>
+  <div class="container" style="margin-top: -70px;">
+    <div class="p-8 pt-0 flex justify-center">
+      <div id="content_rank"></div>
+      <div id="note_rank"></div>
+    </div>
+  </div>
+  <py-script output="content_rank">
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import matplotlib.font_manager as fm
+
+    NanumGothic = fm.FontProperties(fname='./NanumBarunGothic.ttf')
+    NanumGothicBold = fm.FontProperties(fname='./NanumBarunGothicBold.ttf')
+
+    fig, ax = plt.subplots()
+
+    x = np.arange(5)
+    y = np.arange(0, {{content_rank.0.count}} + 1)
+    username = ['{{content_rank.0.user_name}}', '{{content_rank.1.user_name}}', '{{content_rank.2.user_name}}', '{{content_rank.3.user_name}}', '{{content_rank.4.user_name}}']
+    values = [{{content_rank.0.count}}, {{content_rank.1.count}}, {{content_rank.2.count}},{{content_rank.3.count}},{{content_rank.4.count}}]
+    colors = ['#0f2460', '#6d6cd8', '#5a6bd0', '#5373ed', '#a2b4f0']
+
+    plt.title("콘텐츠 등록 개수 랭킹 TOP5", fontproperties=NanumGothicBold, fontsize=16)
+    plt.bar(x, values, color=colors, width=0.8)
+    plt.xticks(x, username, fontproperties=NanumGothic, fontsize=12)
+    plt.yticks(y)
+
+    fig
+  </py-script>
+  <py-script output="note_rank">
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import matplotlib.font_manager as fm
+
+    NanumGothic = fm.FontProperties(fname='./NanumBarunGothic.ttf')
+    NanumGothicBold = fm.FontProperties(fname='./NanumBarunGothicBold.ttf')
+
+    fig, ax = plt.subplots()
+
+    x = np.arange(3)
+    y = np.arange(0, {{content_rank.0.count}} + 1)
+    <!-- username = ['{{note_rank.0.user_name}}', '{{note_rank.1.user_name}}', '{{note_rank.2.user_name}}', '{{note_rank.3.user_name}}', '{{note_rank.4.user_name}}']
+    values = [{{note_rank.0.count}}, {{note_rank.1.count}}, {{note_rank.2.count}},{{note_rank.3.count}},{{note_rank.4.count}}] -->
+    username = ['{{note_rank.0.user_name}}', '{{note_rank.1.user_name}}', '{{note_rank.2.user_name}}']
+    values = [{{note_rank.0.count}}, {{note_rank.1.count}}, {{note_rank.2.count}}]
+    colors = ['#0f2460', '#6d6cd8', '#5a6bd0', '#5373ed', '#a2b4f0']
+    
+    plt.title("학습 노트 등록 개수 랭킹 TOP5", fontproperties=NanumGothicBold, fontsize=16)
+    plt.bar(x, values, color=colors, width=0.8)
+    plt.xticks(x, username, fontproperties=NanumGothic, fontsize=12)
+    plt.yticks(y)
+
+    fig
+  </py-script>
+</body>
+{% endblock %}
+{% include 'common/footer.html' %}
+</html>
+

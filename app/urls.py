@@ -10,4 +10,6 @@ urlpatterns = [
     path('my-content', views.mycontent, name='my-content'),
     path('my-note', views.mynote, name='my-note'),
     path('my-note-list', views.mynote_list, name='my-note-list'),
+    path('my-like', views.mylike, name='myliket'),
+    path('rank', views.rank, name='rank'),
 ]
