@@ -11,5 +11,6 @@ urlpatterns = [
     path('my-note', views.mynote, name='my-note'),
     path('my-note-list', views.mynote_list, name='my-note-list'),
     path('my-like', views.mylike, name='myliket'),
+    path('my-watch', views.mywatch, name='mywatch'),
     path('rank', views.rank, name='rank'),
 ]

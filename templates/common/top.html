@@ -7,7 +7,13 @@
       <div class="icon-box">
         {% if request.path in '/content/' %}
         <div class="flex mr-4">
-          <input type="text" id='search' class="rounded border-0 bg-slate-200" onkeyup="search()">
+          <input type="text" id='searchContent' class="rounded border-0 bg-slate-200" onkeyup="searchContent()" placeholder="콘텐츠 검색">
+          <span class="flex items-center relative"><img class="absolute right-2 w-6 h-6 max-w-none" src="{% static '/css/search-icon.svg' %}" /></span>
+        </div>
+        {% endif %}
+        {% if request.path in '/playlist/' %}
+        <div class="flex mr-4">
+          <input type="text" id='searchPlaylist' class="rounded border-0 bg-slate-200" onkeyup="searchPlaylist()" placeholder="재생목록 검색">
           <span class="flex items-center relative"><img class="absolute right-2 w-6 h-6 max-w-none" src="{% static '/css/search-icon.svg' %}" /></span>
         </div>
         {% endif %}
@@ -28,7 +34,7 @@
 
         <!-- Dropdown menu -->
         <div id="dropdownAvatarName"
-          class="z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow :bg-gray-700 :divide-gray-600 hidden"
+          class="z-50 w-44 bg-white rounded divide-y divide-gray-100 shadow :bg-gray-700 :divide-gray-600 hidden"
           data-popper-placement="bottom"
           style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(415.2px, 62.4px, 0px);">
           <div class="py-3 px-4 text-sm text-gray-900 :text-white">
@@ -65,10 +71,17 @@
   </div>
 </div>
 <script>
-  function search() {
+  function searchContent() {
     if (window.event.keyCode == 13) {
-      let searchText = document.getElementById('search').value;
+      let searchText = document.getElementById('searchContent').value;
       window.location.href = '/content?title=' + searchText;
+    }
+  }
+
+  function searchPlaylist() {
+    if (window.event.keyCode == 13) {
+      let searchText = document.getElementById('searchPlaylist').value;
+      window.location.href = '/playlist?title=' + searchText;
     }
   }
 </script>

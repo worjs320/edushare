@@ -53,7 +53,7 @@ def mycontent(request):
 
 def mynote(request):
   user = User.objects.get(username=request.user.username)
-  notes = Note.objects.filter(user_id=user)
+  notes = Note.objects.order_by('created_date').filter(user_id=user)
 
   return render(request, 'app/my-note.html', {'notes': notes })
 
@@ -71,3 +71,7 @@ def rank(request):
   content_rank = Content.objects.all().values('user_name').annotate(count=Count('user_name')).order_by('-count')
   note_rank = Note.objects.all().values('user_name').annotate(count=Count('user_name')).order_by('-count')
   return render(request, 'app/rank.html', {'content_rank': content_rank, 'note_rank': note_rank})
+
+def mywatch(request):
+  contents = Content.objects.filter(view=request.user)
+  return render(request, 'app/my-watch.html', {'contents': contents})

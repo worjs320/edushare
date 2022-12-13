@@ -55,6 +55,14 @@ def content_info(request, content_pk):
     content = Content.objects.get(pk=content_pk)
     notes = Note.objects.filter(content=content_pk)
     content.view_count += 1
+  
+    if request.user.is_authenticated:
+      user = request.user
+      if content.view.filter(id = user.id).exists():
+        pass
+      else:
+        content.view.add(user)
+
     content.save()
     return render(request, 'content/content_info.html', {'content': content, 'notes': notes})
 
@@ -70,7 +78,7 @@ def note_add(request, content_pk):
     hour_pattern = re.findall('\[[1-9]:[0-5][0-9]:[0-5][0-9]\]', description)
     for pattern in hour_pattern:
 	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')
-
+    
     minute_pattern_one = re.findall('\[[0-9]:[0-5][0-9]\]', description)
     for pattern in minute_pattern_one:
 	    description = description.replace(pattern, '<a class="time-move-btn cursor-pointer">' + pattern.strip("[""]") + '</a>')

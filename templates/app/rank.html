@@ -30,7 +30,7 @@
       <a class="sub-navigation" href="/content">
         <div>콘텐츠</div>
       </a>
-      <a class="sub-navigation" href="">
+      <a class="sub-navigation" href="/playlist">
         <div>재생 목록</div>
       </a>
       <a class="sub-navigation active" href="/rank">
@@ -87,12 +87,10 @@
 
     fig, ax = plt.subplots()
 
-    x = np.arange(3)
+    x = np.arange(5)
     y = np.arange(0, {{content_rank.0.count}} + 1)
-    <!-- username = ['{{note_rank.0.user_name}}', '{{note_rank.1.user_name}}', '{{note_rank.2.user_name}}', '{{note_rank.3.user_name}}', '{{note_rank.4.user_name}}']
-    values = [{{note_rank.0.count}}, {{note_rank.1.count}}, {{note_rank.2.count}},{{note_rank.3.count}},{{note_rank.4.count}}] -->
-    username = ['{{note_rank.0.user_name}}', '{{note_rank.1.user_name}}', '{{note_rank.2.user_name}}']
-    values = [{{note_rank.0.count}}, {{note_rank.1.count}}, {{note_rank.2.count}}]
+    username = ['{{note_rank.0.user_name}}', '{{note_rank.1.user_name}}', '{{note_rank.2.user_name}}', '{{note_rank.3.user_name}}', '{{note_rank.4.user_name}}']
+    values = [{{note_rank.0.count}}, {{note_rank.1.count}}, {{note_rank.2.count}},{{note_rank.3.count}},{{note_rank.4.count}}]
     colors = ['#0f2460', '#6d6cd8', '#5a6bd0', '#5373ed', '#a2b4f0']
     
     plt.title("학습 노트 등록 개수 랭킹 TOP5", fontproperties=NanumGothicBold, fontsize=16)
